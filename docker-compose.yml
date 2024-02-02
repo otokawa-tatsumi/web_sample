@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  perl-app:
+    build:
+      context: ./perl-app
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
+    volumes:
+      - "./perl-app/src:/app"
+
+  html-app:
+    build:
+      context: ./html-app
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    volumes:
+      - "./html-app/src:/usr/share/nginx/html"
