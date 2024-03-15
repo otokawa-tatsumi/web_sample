@@ -11,4 +11,4 @@ RUN cpanm Mojolicious
 EXPOSE 8080
 
 # 実行コマンド（Mojoliciousアプリケーションの起動）
-CMD ["morbo", "app.pl", "-l", "http://*:8080"]
+CMD ["morbo", "index.pl", "-l", "http://*:8080"]

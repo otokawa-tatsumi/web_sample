@@ -1,14 +1,25 @@
 version: '3'
 
 services:
-  perl-app:
-    build:
-      context: ./perl-app
-      dockerfile: Dockerfile
-    ports:
-      - "8081:8080"
-    volumes:
-      - "./perl-app/src:/app"
+  # バックエンドをperlにしたい場合はコメントを外す
+  # perl-app:
+  #   build:
+  #     context: ./perl-app
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8081:8080"
+  #   volumes:
+  #     - "./perl-app/src:/app"
+
+  # バックエンドをnode.jsにしたい場合はコメントを外す
+  # node-app:
+  #   build:
+  #     context: ./node-app
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8081:8080"
+  #   volumes:
+  #     - "./node-app/src:/app"
 
   html-app:
     build:
