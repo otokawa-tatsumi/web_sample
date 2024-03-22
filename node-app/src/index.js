@@ -26,7 +26,7 @@ app.post('/', (req, res) => {
   res.json({message: 'Hello, POST request!'});
 });
 
-// ログインエンドポイント
+// ログイン処理
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
   
@@ -40,7 +40,7 @@ app.post('/login', (req, res) => {
   }
 });
 
-// ログアウトエンドポイント
+// ログアウト処理
 app.post('/logout', (req, res) => {
   // セッションからユーザー情報を削除する
   req.session.destroy();
