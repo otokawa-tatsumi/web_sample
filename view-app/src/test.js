@@ -1,7 +1,7 @@
 // 非同期関数でGETリクエストを送信
 async function sendGetRequest() {
     try {
-        const response = await fetch('http://localhost:8081/');
+        const response = await fetch('/api/');
         const data = await response.json();
         document.getElementById('getResponse').innerHTML = 'GET Response: ' + data.message;
     } catch (error) {
@@ -12,7 +12,7 @@ async function sendGetRequest() {
 // 非同期関数でPOSTリクエストを送信
 async function sendPostRequest() {
     try {
-        const response = await fetch('http://localhost:8081/', {
+        const response = await fetch('/api/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

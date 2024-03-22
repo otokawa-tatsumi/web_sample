@@ -1,13 +1,13 @@
 {
-  "name": "express-example",
+  "name": "node-example",
   "version": "1.0.0",
-  "description": "Expressを使用したGETとPOSTのサンプルコード",
+  "description": "node.jsのサンプルコード",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
     "express": "^4.17.1",
-    "cors": "^2.8.5"
+    "express-session": "^1.18.0"
   }
 }
