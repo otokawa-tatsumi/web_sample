@@ -1,20 +1,47 @@
 version: '3'
 
 services:
-  perl-app:
-    build:
-      context: ./perl-app
-      dockerfile: Dockerfile
-    ports:
-      - "8081:8080"
-    volumes:
-      - "./perl-app/src:/app"
+  # バックエンドをperlにしたい場合はコメントを外す
+  # api-app:
+  #   build:
+  #     context: ./perl-app
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - "./perl-app/src:/app"
+  #   networks:
+  #     - nginx-server
 
-  html-app:
+  # バックエンドをnode.jsにしたい場合はコメントを外す
+  api-app:
     build:
-      context: ./html-app
+      context: ./node-app
+      dockerfile: Dockerfile
+    volumes:
+      - "./node-app/src:/app"
+    networks:
+      - nginx-server
+
+  view-app:
+    build:
+      context: ./view-app
+      dockerfile: Dockerfile
+    volumes:
+      - "./view-app/src:/usr/share/nginx/view"
+    networks:
+      - nginx-server
+
+  nginx:
+    build:
+      context: ./nginx
       dockerfile: Dockerfile
     ports:
       - "8080:80"
-    volumes:
-      - "./html-app/src:/usr/share/nginx/html"
+    depends_on:
+      - view-app
+      - api-app
+    networks:
+      - nginx-server
+
+networks:
+  nginx-server:
+    driver: bridge

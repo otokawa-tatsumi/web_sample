@@ -5,7 +5,7 @@ FROM nginx:latest
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # 作業ディレクトリを設定
-WORKDIR /usr/share/nginx/html
+WORKDIR /usr/share/nginx/view
 
 # ポートを開放
 EXPOSE 80
