@@ -1,6 +1,43 @@
 version: '3'
 
 services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - volume_postgres:/var/lib/postgresql/data
+      - ./db/init-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - sample-server
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    ports:
+      - "8081:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: admin
+    depends_on:
+      - db
+    volumes:
+      - volume_pgadmin:/var/lib/pgadmin
+      - ./db/servers.json:/pgadmin4/servers.json
+      - ./db/pgpass:/pgadmin4/pgpass
+    # servers.jsonのPassFile設定用
+    # https://github.com/pgadmin-org/pgadmin4/issues/6257
+    entrypoint: >
+      /bin/sh -c "
+      mkdir -m 700 -p /var/lib/pgadmin/storage/admin_pgadmin.org;
+      cp /pgadmin4/pgpass /var/lib/pgadmin/storage/admin_pgadmin.org/;
+      chmod 600 /var/lib/pgadmin/storage/admin_pgadmin.org/pgpass;
+      /entrypoint.sh
+      "
+    networks:
+      - sample-server
+
   # バックエンドをperlにしたい場合はコメントを外す
   # api-app:
   #   build:
@@ -9,7 +46,7 @@ services:
   #   volumes:
   #     - "./perl-app/src:/app"
   #   networks:
-  #     - nginx-server
+  #     - sample-server
 
   # バックエンドをnode.jsにしたい場合はコメントを外す
   api-app:
@@ -19,7 +56,7 @@ services:
     volumes:
       - "./node-app/src:/app"
     networks:
-      - nginx-server
+      - sample-server
 
   view-app:
     build:
@@ -28,7 +65,7 @@ services:
     volumes:
       - "./view-app/src:/usr/share/nginx/view"
     networks:
-      - nginx-server
+      - sample-server
 
   nginx:
     build:
@@ -40,8 +77,14 @@ services:
       - view-app
       - api-app
     networks:
-      - nginx-server
+      - sample-server
 
 networks:
-  nginx-server:
+  sample-server:
     driver: bridge
+
+volumes:
+  volume_postgres:
+    name: vpg
+  volume_pgadmin:
+    name: vpga
