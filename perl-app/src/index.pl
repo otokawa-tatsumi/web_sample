@@ -1,32 +1,65 @@
 use Mojolicious::Lite;
 
-# フックを使用してCORSヘッダーを設定
-hook before_dispatch => sub {
-    my $c = shift;
+# ダミーデータ
+my %users = (
+    user => 'password',
+);
 
-    $c->res->headers->header('Access-Control-Allow-Origin' => '*');
-    $c->res->headers->header('Access-Control-Allow-Methods' => 'GET, POST, OPTIONS');
-    $c->res->headers->header('Access-Control-Allow-Headers' => 'DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range');
-};
-
-# GETリクエストへの応答
+# GET確認用
 get '/' => sub {
     my $c = shift;
     # JSON形式でレスポンスを返す
     $c->render(json => { message => 'Hello, GET request!' });
 };
 
-# POSTリクエストへの応答
+# POST確認用
 post '/' => sub {
     my $c = shift;
     # JSON形式でレスポンスを返す
     $c->render(json => { message => 'Hello, POST request!' });
 };
 
-# OPTIONSリクエストへの応答（CORSのプリフライトリクエスト対応）
-options '/' => sub {
+# ログイン処理
+post '/login' => sub {
     my $c = shift;
-    $c->rendered(204);
+    my $json_data = $c->req->json;
+    my $username = $json_data->{username};
+    my $password = $json_data->{password};
+
+    # ユーザーの認証
+    if (exists $users{$username} && $users{$username} eq $password) {
+        # ログイン成功
+        $c->session(user => $username);
+        $c->render(text => 'Login successful', status => 200);
+    } else {
+        # ログイン失敗
+        $c->render(text => 'Login failed', status => 401);
+    }
+};
+
+# ログイン状態確認
+under sub {
+    my $c = shift;
+    unless ($c->session('user')) {
+        $c->render(json => { message => '未ログイン。' }, status => 401);
+        return;
+    }
+    # ログインしている場合は次の処理に進む
+    return 1;
+};
+
+# ログアウト処理
+post '/logout' => sub {
+    my $c = shift;
+    # セッションからユーザー情報を削除する
+    $c->session(expires => 1);
+    $c->render(text => 'Logout successful', status => 200);
+};
+
+# メイン処理
+get '/main' => sub {
+    my $c = shift;
+    $c->render(json => { message => 'ログインしています。' });
 };
 
 # アプリケーションの開始
