@@ -16,6 +16,11 @@ app.use(session({
 // body-parserミドルウェアを使用して、リクエストボディのJSONデータを解析する
 app.use(bodyParser.json());
 
+// ダミーデータ
+const users = {
+  user: "password"
+}
+
 // GET確認用
 app.get('/', (req, res) => {
   res.json({message: 'Hello, GET request!'});
@@ -31,10 +36,9 @@ app.post('/login', (req, res) => {
   const { username, password } = req.body;
   
   // ユーザー名とパスワードのチェック（省略）
-  if (username === 'user' && password === 'password') {
-    req.session.isLoggedIn = true;
+  if (users[username] && users[username] === password) {
     req.session.user = username;
-    res.status(200).send('Login successful');
+    res.send('Login successful');
   } else {
     res.status(401).send('Login failed');
   }
@@ -47,13 +51,23 @@ app.post('/logout', (req, res) => {
   res.send('Logout successful');
 });
 
-// メイン処理
-app.get('/main', (req, res) => {
-  if (req.session.isLoggedIn) {
-    res.json({message: 'ログインしています。'});
-  } else {
-    res.status(401).json({message: '未ログイン。'});
+// ログイン状態確認
+const requireLogin = (req, res, next) => {
+  // セッションからユーザー情報を取得
+  const user = req.session.user;
+
+  // ログインしていない場合はエラーを返す
+  if (!user) {
+      return res.status(401).json({ message: 'ログインが必要です' });
   }
+
+  // ログインしている場合は次の処理に進む
+  next();
+};
+
+// メイン処理
+app.get('/main', requireLogin, (req, res) => {
+  res.json({message: 'ログインしています。'});
 });
 
 // サーバーを起動
