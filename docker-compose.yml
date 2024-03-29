@@ -57,7 +57,6 @@ services:
       - "./node-app/src:/app"
     networks:
       - sample-server
-      - nginx-server
 
   view-app:
     build:
