@@ -1,5 +1,20 @@
-# web_sample
+# Web sample
 Web開発のサンプルコード
+
+# フォルダ構成
+```
+web_sample
+    ├─ db  # DB用のファイル（現状はPostgreSQL）
+    ├─ view-app  # フロント用のソース
+    |  #以下、バックエンド用のソース
+    ├─ node-app  # Node.jsソース
+    ├─ python-app  # pythonソース
+    ├─ perl-app # perlソース
+    |
+    ├─ # coming soon…
+```
+
+- バックエンド用のソースは、docker-compose.ymlを編集し、使いたい言語のapi-appのコメントアウトを外す
 
 # 構築手順
 - dockerインストール
@@ -33,4 +48,13 @@ docker-compose up --build
 - 停止
 ```bash
 docker-compose down
+# DBを初期化したい場合は以下
+docker-compose down -v
 ```
+
+# DBの参照方法
+- localhost:8081にアクセスし、以下の情報でログインする(pgadmin 4)
+    - ユーザー：admin@pgadmin.org
+    - パスワード：admin
+
+![alt text](doc/pgadmin.png)
