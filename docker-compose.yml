@@ -59,14 +59,14 @@ services:
   #     - sample-server
 
   # バックエンドをpythonにしたい場合はコメントを外す
-  api-app:
-    build:
-      context: ./python-app
-      dockerfile: Dockerfile
-    volumes:
-      - "./python-app:/app"
-    networks:
-      - sample-server
+  # api-app:
+  #   build:
+  #     context: ./python-app
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - "./python-app:/app"
+  #   networks:
+  #     - sample-server
 
   view-app:
     build:
