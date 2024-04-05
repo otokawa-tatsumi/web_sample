@@ -49,12 +49,22 @@ services:
   #     - sample-server
 
   # バックエンドをnode.jsにしたい場合はコメントを外す
+  # api-app:
+  #   build:
+  #     context: ./node-app
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - "./node-app/src:/app"
+  #   networks:
+  #     - sample-server
+
+  # バックエンドをpythonにしたい場合はコメントを外す
   api-app:
     build:
-      context: ./node-app
+      context: ./python-app
       dockerfile: Dockerfile
     volumes:
-      - "./node-app/src:/app"
+      - "./python-app:/app"
     networks:
       - sample-server
 

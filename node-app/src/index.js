@@ -36,6 +36,23 @@ app.post('/', (req, res) => {
   res.json({message: 'Hello, POST request!'});
 });
 
+// 共通の認証チェックミドルウェア
+app.use((req, res, next) => {
+  // ログインページへのアクセスの場合は認証チェックをスキップ
+  if (req.path === '/login') {
+      return next();
+  }
+  // その他の場合は共通の認証チェックを行う
+  const user = req.session.user;
+  if (user) {
+    // 認証されている場合は次のミドルウェア関数に制御を渡す
+    return next();
+  }
+
+  // ログインしていない場合はエラーを返す
+  return res.status(401).json({ message: 'Not authenticated' });
+});
+
 // ログイン処理
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
@@ -43,7 +60,7 @@ app.post('/login', (req, res) => {
   // PostgreSQLのusersテーブルで認証
   const query = {
     text:
-      'SELECT * FROM users WHERE username = $1 AND password = $2',
+      'SELECT * FROM users WHERE username = $1 AND password = $2;',
     values: [username, password],
   };
   pgPool.connect(function (err, client) {
@@ -74,26 +91,12 @@ app.post('/logout', (req, res) => {
   res.send('Logout successful');
 });
 
-// ログイン状態確認
-const requireLogin = (req, res, next) => {
-  // セッションからユーザー情報を取得
-  const user = req.session.user;
-
-  // ログインしていない場合はエラーを返す
-  if (!user) {
-      return res.status(401).json({ message: 'ログインが必要です' });
-  }
-
-  // ログインしている場合は次の処理に進む
-  next();
-};
-
 // メイン処理
-app.get('/main', requireLogin, (req, res) => {
-  res.json({message: 'ログインしています。'});
+app.get('/main', (req, res) => {
+  res.json({message: 'Welcome, you are authenticated.'});
 });
 
 // サーバーを起動
 app.listen(port, () => {
-  console.log(`サーバーがポート ${port} で起動しました`);
+  console.log(`The server is running on port ${port}.`);
 });

@@ -41,7 +41,7 @@ post '/login' => sub {
 under sub {
     my $c = shift;
     unless ($c->session('user')) {
-        $c->render(json => { message => '未ログイン。' }, status => 401);
+        $c->render(json => { message => 'Not authenticated' }, status => 401);
         return;
     }
     # ログインしている場合は次の処理に進む
@@ -59,7 +59,7 @@ post '/logout' => sub {
 # メイン処理
 get '/main' => sub {
     my $c = shift;
-    $c->render(json => { message => 'ログインしています。' });
+    $c->render(json => { message => 'Welcome, you are authenticated.' });
 };
 
 # アプリケーションの開始
