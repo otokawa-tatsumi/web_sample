@@ -2,7 +2,6 @@ from sqlalchemy import create_engine, MetaData, Table, select
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.ext.declarative import declarative_base
-from models import UserLogin
 
 # PostgreSQL接続情報
 pg_info = {
