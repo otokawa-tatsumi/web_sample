@@ -4,8 +4,11 @@ FROM perl:latest
 # 作業ディレクトリを設定
 WORKDIR /app
 
-# Mojoliciousモジュールをインストール
+# 必要なモジュールをインストール
 RUN cpanm Mojolicious
+RUN cpanm DBI
+RUN cpanm DBD::Pg
+RUN cpanm DBIx::Connector
 
 # ポートを開放
 EXPOSE 8080

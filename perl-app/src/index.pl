@@ -1,8 +1,23 @@
 use Mojolicious::Lite;
+use DBIx::Connector;
 
-# ダミーデータ
-my %users = (
-    user => 'password',
+# PostgreSQLの接続情報
+my $database = 'postgres';
+my $host = 'db';
+my $port = '5432';
+my $user = 'postgres';
+my $password = 'postgres';
+
+# 接続プールを作成
+my $connector = DBIx::Connector->new(
+    "dbi:Pg:dbname=$database;host=$host;port=$port",
+    $user,
+    $password,
+    {
+        RaiseError => 1,
+        PrintError => 0,
+        AutoCommit => 1,
+    }
 );
 
 # GET確認用
@@ -26,8 +41,16 @@ post '/login' => sub {
     my $username = $json_data->{username};
     my $password = $json_data->{password};
 
-    # ユーザーの認証
-    if (exists $users{$username} && $users{$username} eq $password) {
+    # データベースからデータを取得
+    my $data = $connector->run(
+        fixup => sub {
+            my $dbh = shift;
+            my $sth = $dbh->prepare('SELECT * FROM users WHERE username = ? AND password = ?;');
+            $sth->execute($username, $password);
+            return $sth->fetchall_arrayref({});
+        }
+    );
+    if (@$data) {
         # ログイン成功
         $c->session(user => $username);
         $c->render(text => 'Login successful', status => 200);
