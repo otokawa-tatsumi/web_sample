@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const pg = require("pg");
 
 const app = express();
-const port = 8080;
+const app_port = 8080;
 
 // express-sessionの設定
 app.use(session({
@@ -17,13 +17,20 @@ app.use(session({
 // body-parserミドルウェアを使用して、リクエストボディのJSONデータを解析する
 app.use(bodyParser.json());
 
-// PostgreSQLデータベースの接続情報
+// PostgreSQLの接続情報
+const database = 'postgres';
+const host = 'db';
+const port = '5432';
+const user = 'postgres';
+const password = 'postgres';
+
+// 接続プールを作成
 const pgPool = new pg.Pool({
-  database: 'postgres',
-  host: 'db',
-  port: '5432',
-  user: 'postgres',
-  password: 'postgres',
+  database: database,
+  host: host,
+  port: port,
+  user: user,
+  password: password,
 });
 
 // GET確認用
@@ -97,6 +104,6 @@ app.get('/main', (req, res) => {
 });
 
 // サーバーを起動
-app.listen(port, () => {
-  console.log(`The server is running on port ${port}.`);
+app.listen(app_port, () => {
+  console.log(`The server is running on port ${app_port}.`);
 });
