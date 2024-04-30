@@ -74,15 +74,15 @@ services:
   #     - sample-server
 
   # バックエンドをphpにしたい場合はコメントを外す
-  api-app:
-    build:
-      context: ./php-app
-      dockerfile: Dockerfile
-    container_name: web_sample_api
-    volumes:
-      - "./php-app:/app"
-    networks:
-      - sample-server
+  # api-app:
+  #   build:
+  #     context: ./php-app
+  #     dockerfile: Dockerfile
+  #   container_name: web_sample_api
+  #   volumes:
+  #     - "./php-app:/app"
+  #   networks:
+  #     - sample-server
 
   view-app:
     build:
