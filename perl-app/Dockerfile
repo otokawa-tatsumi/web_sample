@@ -14,5 +14,5 @@ RUN cpanm Crypt::Eksblowfish::Bcrypt@0.009
 # ポートを開放
 EXPOSE 8080
 
-# 実行コマンド（Mojoliciousアプリケーションの起動）
-CMD ["hypnotoad", "-f", "index.pl"]
+# コンテナ起動時のコマンド指定
+CMD ["sh", "run.sh"]

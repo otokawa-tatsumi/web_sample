@@ -6,10 +6,17 @@ WORKDIR /app
 
 # 必要モジュールをインストール
 RUN apt-get update && apt-get install -y \
+    git \
+    unzip \
+    libzip-dev \
     libpq-dev \
-    && docker-php-ext-install pdo pdo_pgsql
+    && docker-php-ext-install pdo_pgsql zip
+
+# Composerをインストール
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # ポートを開放
 EXPOSE 8080
 
-CMD ["php", "artisan", "serve", "--host", "0.0.0.0", "--port", "8080"]
+# コンテナ起動時のコマンド指定
+CMD ["sh", "run.sh"]
