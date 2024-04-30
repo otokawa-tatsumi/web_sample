@@ -16,5 +16,5 @@ fi
 # パッケージインストール
 composer install --no-dev --optimize-autoloader
 
-# サーバー開始
+# サーバー開始(この手法は本番ではNG)
 php artisan serve --host 0.0.0.0 --port 8080
