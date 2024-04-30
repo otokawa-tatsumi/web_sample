@@ -3,6 +3,7 @@ version: '3'
 services:
   db:
     image: postgres:latest
+    container_name: web_sample_db
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
@@ -15,6 +16,7 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4:latest
+    container_name: web_sample_pgadmin
     ports:
       - "8081:80"
     environment:
@@ -43,6 +45,7 @@ services:
   #   build:
   #     context: ./perl-app
   #     dockerfile: Dockerfile
+  #   container_name: web_sample_api
   #   volumes:
   #     - "./perl-app/src:/app"
   #   networks:
@@ -53,6 +56,7 @@ services:
   #   build:
   #     context: ./node-app
   #     dockerfile: Dockerfile
+  #   container_name: web_sample_api
   #   volumes:
   #     - "./node-app/src:/app"
   #   networks:
@@ -63,8 +67,20 @@ services:
   #   build:
   #     context: ./python-app
   #     dockerfile: Dockerfile
+  #   container_name: web_sample_api
   #   volumes:
   #     - "./python-app:/app"
+  #   networks:
+  #     - sample-server
+
+  # バックエンドをphpにしたい場合はコメントを外す
+  # api-app:
+  #   build:
+  #     context: ./php-app
+  #     dockerfile: Dockerfile
+  #   container_name: web_sample_api
+  #   volumes:
+  #     - "./php-app:/app"
   #   networks:
   #     - sample-server
 
@@ -72,6 +88,7 @@ services:
     build:
       context: ./view-app
       dockerfile: Dockerfile
+    container_name: web_sample_view
     volumes:
       - "./view-app/src:/usr/share/nginx/view"
     networks:
@@ -81,6 +98,7 @@ services:
     build:
       context: ./nginx
       dockerfile: Dockerfile
+    container_name: web_sample_nginx
     ports:
       - "8080:80"
     depends_on:

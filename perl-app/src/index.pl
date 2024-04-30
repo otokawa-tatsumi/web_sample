@@ -1,5 +1,6 @@
 use Mojolicious::Lite;
 use DBIx::Connector;
+use Crypt::Eksblowfish::Bcrypt "en_base64", "de_base64", "bcrypt_hash";
 
 # PostgreSQLの接続情報
 my $database = 'postgres';
@@ -20,20 +21,6 @@ my $connector = DBIx::Connector->new(
     }
 );
 
-# GET確認用
-get '/' => sub {
-    my $c = shift;
-    # JSON形式でレスポンスを返す
-    $c->render(json => { message => 'Hello, GET request!' });
-};
-
-# POST確認用
-post '/' => sub {
-    my $c = shift;
-    # JSON形式でレスポンスを返す
-    $c->render(json => { message => 'Hello, POST request!' });
-};
-
 # ログイン処理
 post '/login' => sub {
     my $c = shift;
@@ -45,17 +32,38 @@ post '/login' => sub {
     my $data = $connector->run(
         fixup => sub {
             my $dbh = shift;
-            my $sth = $dbh->prepare('SELECT * FROM users WHERE username = ? AND password = ?;');
-            $sth->execute($username, $password);
+            my $sth = $dbh->prepare('SELECT * FROM users WHERE username = ?;');
+            $sth->execute($username);
             return $sth->fetchall_arrayref({});
         }
     );
     if (@$data) {
-        # ログイン成功
-        $c->session(user => $username);
-        $c->render(text => 'Login successful', status => 200);
+        # bcryptハッシュ化されたパスワードを比較
+        my $h_password = $data->[0]{'password'};
+        # app->log->info($h_password);
+        # bcryptを分解
+        my ( $unused, $algo, $cost, $salt_and_pass ) = split /\$/, $h_password;
+        # ソルト
+        my $salt = substr $salt_and_pass, 0, 22;
+        # 取得したコストとソルトとを使用して、入力パスワードからハッシュ値を作成
+        my $hash = en_base64(
+            bcrypt_hash(
+                {
+                    cost    => $cost,
+                    key_nul => 1,
+                    salt    => de_base64($salt)
+                },
+                $password
+            )
+        );
+        $password = sprintf '$%s$%d$%s%s', $algo, $cost, $salt, $hash;
+        if ($password eq $h_password) {
+            $c->session(user => $username);
+            $c->render(text => 'Login successful', status => 200);
+        } else {
+            $c->render(text => 'Login failed', status => 401);
+        }
     } else {
-        # ログイン失敗
         $c->render(text => 'Login failed', status => 401);
     }
 };

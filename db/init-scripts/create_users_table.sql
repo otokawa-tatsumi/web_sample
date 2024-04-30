@@ -6,4 +6,4 @@ CREATE TABLE users (
 );
 
 -- 検証用ユーザーを挿入
-INSERT INTO users (username, password) VALUES ('user', 'password');
+INSERT INTO users (username, password) VALUES ('user', '$2y$12$pR5J/lhoqgRYElcXpulUIOiNi9IX0o56ZNpB/DBrT9liu5zM/SHjy');

@@ -3,6 +3,7 @@ const session = require('express-session');
 const crypto = require('crypto');
 const bodyParser = require('body-parser');
 const pg = require("pg");
+const bcrypt = require('bcryptjs');
 
 const app = express();
 const app_port = 8080;
@@ -33,16 +34,6 @@ const pgPool = new pg.Pool({
   password: password,
 });
 
-// GET確認用
-app.get('/', (req, res) => {
-  res.json({message: 'Hello, GET request!'});
-});
-
-// POST確認用
-app.post('/', (req, res) => {
-  res.json({message: 'Hello, POST request!'});
-});
-
 // 共通の認証チェックミドルウェア
 app.use((req, res, next) => {
   // ログインページへのアクセスの場合は認証チェックをスキップ
@@ -61,14 +52,14 @@ app.use((req, res, next) => {
 });
 
 // ログイン処理
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
   // PostgreSQLのusersテーブルで認証
   const query = {
     text:
-      'SELECT * FROM users WHERE username = $1 AND password = $2;',
-    values: [username, password],
+      'SELECT * FROM users WHERE username = $1;',
+    values: [username],
   };
   pgPool.connect(function (err, client) {
     if (err) {
@@ -78,8 +69,21 @@ app.post('/login', (req, res) => {
     client.query(query)
       .then(result => {
         if (result.rows.length > 0) {
-          req.session.user = username;
-          res.send('Login successful');
+          // bcryptハッシュ化されたパスワードを比較
+          const hPassword = result.rows[0].password;
+          bcrypt.compare(password, hPassword, function(e, r) {
+            if (e) {
+              console.error(e);
+              res.status(401).send('Login failed');
+              return
+            }
+            if (r) {
+              req.session.user = username;
+              res.send('Login successful');
+            } else {
+              res.status(401).send('Login failed');
+            }
+          });
         } else {
           res.status(401).send('Login failed');
         }
@@ -99,7 +103,7 @@ app.post('/logout', (req, res) => {
 });
 
 // メイン処理
-app.get('/main', (req, res) => {
+app.get('/main', (_req, res) => {
   res.json({message: 'Welcome, you are authenticated.'});
 });
 

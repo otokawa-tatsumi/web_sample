@@ -7,5 +7,5 @@ WORKDIR /app
 # ポートを開放
 EXPOSE 8080
 
-# コンテナー起動時のコマンド指定
-CMD ["sh", "-c", "npm install && npm start"]
+# コンテナ起動時のコマンド指定
+CMD ["sh", "run.sh"]

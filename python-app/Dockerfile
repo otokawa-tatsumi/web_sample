@@ -13,5 +13,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 # ポートを開放
 EXPOSE 8080
 
-# FastAPIアプリケーションを起動
-CMD ["uvicorn", "index:app", "--host", "0.0.0.0", "--port", "8080"]
+# コンテナ起動時のコマンド指定
+CMD ["sh", "run.sh"]
