@@ -17,7 +17,7 @@ class AuthenticateApi
     public function handle(Request $request, Closure $next): Response
     {
         // セッションにユーザー名がない場合はエラーを返す
-        Log::info('Session content:', $request->session()->all());
+        // Log::info('Session content:', $request->session()->all());
         if (!$request->session()->has('key')) {
             return response()->json(['message' => 'Not authenticated'], 401);
         }

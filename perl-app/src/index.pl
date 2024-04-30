@@ -40,6 +40,7 @@ post '/login' => sub {
     if (@$data) {
         # bcryptハッシュ化されたパスワードを比較
         my $h_password = $data->[0]{'password'};
+        # app->log->info($h_password);
         # bcryptを分解
         my ( $unused, $algo, $cost, $salt_and_pass ) = split /\$/, $h_password;
         # ソルト
