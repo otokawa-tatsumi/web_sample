@@ -58,3 +58,16 @@ docker-compose down -v
     - パスワード：admin
 
 ![alt text](doc/pgadmin.png)
+
+
+# その他
+## Laravel環境構築をホストにインストールせずに行う方法
+- composer実行
+``` bash
+docker run --rm -v $(pwd):/app composer composer ＜やりたいこと書く＞
+```
+
+- phpコマンド実行用
+``` bash
+docker run --rm -v $(pwd):/app -w /app php:8.3-cli php ＜やりたいこと書く＞
+```
