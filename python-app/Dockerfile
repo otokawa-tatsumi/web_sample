@@ -8,8 +8,9 @@ WORKDIR /app
 ENV POETRY_HOME=/opt/poetry
 RUN curl -sSL https://install.python-poetry.org | python && \
     cd /usr/local/bin && \
-    ln -s /opt/poetry/bin/poetry && \
-    poetry config virtualenvs.create false
+    ln -s /opt/poetry/bin/poetry
+
+RUN poetry config virtualenvs.in-project true
 
 # ポートを開放
 EXPOSE 8080
