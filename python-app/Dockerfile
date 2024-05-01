@@ -4,11 +4,12 @@ FROM python:3.11
 # アプリケーションディレクトリの作成
 WORKDIR /app
 
-# 必要なファイルをコピー
-COPY ./requirements.txt /app
-
-# 依存関係をインストール
-RUN pip install --no-cache-dir -r requirements.txt
+# poetryインストール
+ENV POETRY_HOME=/opt/poetry
+RUN curl -sSL https://install.python-poetry.org | python && \
+    cd /usr/local/bin && \
+    ln -s /opt/poetry/bin/poetry && \
+    poetry config virtualenvs.create false
 
 # ポートを開放
 EXPOSE 8080
