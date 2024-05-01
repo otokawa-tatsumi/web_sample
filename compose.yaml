@@ -1,8 +1,6 @@
-version: '3'
-
 services:
   db:
-    image: postgres:latest
+    image: postgres:16.2
     container_name: web_sample_db
     environment:
       POSTGRES_DB: postgres
@@ -12,16 +10,15 @@ services:
       - volume_postgres:/var/lib/postgresql/data
       - ./db/init-scripts:/docker-entrypoint-initdb.d
     networks:
-      - sample-server
+      - db-server
 
-  pgadmin:
-    image: dpage/pgadmin4:latest
+  db-manager:
+    image: dpage/pgadmin4:8.4
     container_name: web_sample_pgadmin
-    ports:
-      - "8081:80"
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@pgadmin.org
       PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_LISTEN_PORT: 8081
     depends_on:
       - db
     volumes:
@@ -39,6 +36,7 @@ services:
       "
     networks:
       - sample-server
+      - db-server
 
   # バックエンドをperlにしたい場合はコメントを外す
   # api-app:
@@ -50,6 +48,7 @@ services:
   #     - "./perl-app/src:/app"
   #   networks:
   #     - sample-server
+  #     - db-server
 
   # バックエンドをnode.jsにしたい場合はコメントを外す
   # api-app:
@@ -61,6 +60,7 @@ services:
   #     - "./node-app/src:/app"
   #   networks:
   #     - sample-server
+  #     - db-server
 
   # バックエンドをpythonにしたい場合はコメントを外す
   # api-app:
@@ -72,6 +72,7 @@ services:
   #     - "./python-app:/app"
   #   networks:
   #     - sample-server
+  #     - db-server
 
   # バックエンドをphpにしたい場合はコメントを外す
   # api-app:
@@ -83,6 +84,7 @@ services:
   #     - "./php-app:/app"
   #   networks:
   #     - sample-server
+  #     - db-server
 
   view-app:
     build:
@@ -109,6 +111,8 @@ services:
 
 networks:
   sample-server:
+    driver: bridge
+  db-server:
     driver: bridge
 
 volumes:
