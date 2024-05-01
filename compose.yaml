@@ -106,6 +106,7 @@ services:
     depends_on:
       - view-app
       - api-app
+      - db-manager
     networks:
       - sample-server
 
