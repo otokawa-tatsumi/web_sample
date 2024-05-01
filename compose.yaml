@@ -44,6 +44,8 @@ services:
   #     context: ./perl-app
   #     dockerfile: Dockerfile
   #   container_name: web_sample_api
+  #   depends_on:
+  #     - db
   #   volumes:
   #     - "./perl-app/src:/app"
   #   networks:
@@ -56,6 +58,8 @@ services:
   #     context: ./node-app
   #     dockerfile: Dockerfile
   #   container_name: web_sample_api
+  #   depends_on:
+  #     - db
   #   volumes:
   #     - "./node-app/src:/app"
   #   networks:
@@ -68,6 +72,8 @@ services:
   #     context: ./python-app
   #     dockerfile: Dockerfile
   #   container_name: web_sample_api
+  #   depends_on:
+  #     - db
   #   volumes:
   #     - "./python-app:/app"
   #   networks:
@@ -80,6 +86,8 @@ services:
   #     context: ./php-app
   #     dockerfile: Dockerfile
   #   container_name: web_sample_api
+  #   depends_on:
+  #     - db
   #   volumes:
   #     - "./php-app:/app"
   #   networks:
