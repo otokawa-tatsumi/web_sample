@@ -63,7 +63,7 @@ docker-compose down -v
 ```
 
 ## DBの参照方法
-- localhost:8081にアクセスし、以下の情報でログインする(pgadmin 4)
+- http://localhost:8080/db-manager/にアクセスし、以下の情報でログインする(pgadmin 4)
     - ユーザー：admin@pgadmin.org
     - パスワード：admin
 
