@@ -9,5 +9,4 @@ poetry config virtualenvs.in-project true
 poetry install
 
 # サーバー開始
-cd src
-poetry run uvicorn index:app --host 0.0.0.0 --port 8080
+poetry run uvicorn app.index:app --host 0.0.0.0 --port 8080
