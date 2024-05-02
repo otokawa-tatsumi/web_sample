@@ -1,7 +1,7 @@
 services:
   db:
     image: postgres:16.2
-    container_name: web_sample_db
+    container_name: web-sample-db
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
@@ -14,7 +14,7 @@ services:
 
   db-manager:
     image: dpage/pgadmin4:8.4
-    container_name: web_sample_pgadmin
+    container_name: web-sample-db-manager
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@pgadmin.org
       PGADMIN_DEFAULT_PASSWORD: admin
@@ -43,7 +43,7 @@ services:
   #   build:
   #     context: ./perl-app
   #     dockerfile: Dockerfile
-  #   container_name: web_sample_api
+  #   container_name: web-sample-api
   #   depends_on:
   #     - db
   #   volumes:
@@ -57,7 +57,7 @@ services:
   #   build:
   #     context: ./node-app
   #     dockerfile: Dockerfile
-  #   container_name: web_sample_api
+  #   container_name: web-sample-api
   #   depends_on:
   #     - db
   #   volumes:
@@ -71,7 +71,7 @@ services:
   #   build:
   #     context: ./python-app
   #     dockerfile: Dockerfile
-  #   container_name: web_sample_api
+  #   container_name: web-sample-api
   #   depends_on:
   #     - db
   #   volumes:
@@ -85,7 +85,7 @@ services:
   #   build:
   #     context: ./php-app
   #     dockerfile: Dockerfile
-  #   container_name: web_sample_api
+  #   container_name: web-sample-api
   #   depends_on:
   #     - db
   #   volumes:
@@ -98,7 +98,7 @@ services:
     build:
       context: ./view-app
       dockerfile: Dockerfile
-    container_name: web_sample_view
+    container_name: web-sample-view
     volumes:
       - "./view-app/src:/usr/share/nginx/view"
     networks:
@@ -108,7 +108,7 @@ services:
     build:
       context: ./nginx
       dockerfile: Dockerfile
-    container_name: web_sample_nginx
+    container_name: web-sample-nginx
     ports:
       - "8080:80"
     depends_on:
