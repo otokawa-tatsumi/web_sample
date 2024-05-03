@@ -1,5 +1,5 @@
 # ベースイメージを指定
-FROM nginx:latest
+FROM nginx:1.26.0
 
 # Nginxの設定ファイルをコピー
 COPY nginx.conf /etc/nginx/conf.d/default.conf
