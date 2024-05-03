@@ -10,7 +10,7 @@ services:
       - volume_postgres:/var/lib/postgresql/data
       - ./db/init-scripts:/docker-entrypoint-initdb.d
     networks:
-      - db-server
+      - db
 
   db-manager:
     image: dpage/pgadmin4:8.4
@@ -35,8 +35,8 @@ services:
       /entrypoint.sh
       "
     networks:
-      - sample-server
-      - db-server
+      - backend
+      - db
 
   # バックエンドをperlにしたい場合はコメントを外す
   # api-app:
@@ -49,8 +49,8 @@ services:
   #   volumes:
   #     - "./perl-app/src:/app"
   #   networks:
-  #     - sample-server
-  #     - db-server
+  #     - backend
+  #     - db
 
   # バックエンドをnode.jsにしたい場合はコメントを外す
   # api-app:
@@ -63,8 +63,8 @@ services:
   #   volumes:
   #     - "./node-app/src:/app"
   #   networks:
-  #     - sample-server
-  #     - db-server
+  #     - backend
+  #     - db
 
   # バックエンドをpythonにしたい場合はコメントを外す
   # api-app:
@@ -77,8 +77,8 @@ services:
   #   volumes:
   #     - "./python-app:/app"
   #   networks:
-  #     - sample-server
-  #     - db-server
+  #     - backend
+  #     - db
 
   # バックエンドをphpにしたい場合はコメントを外す
   # api-app:
@@ -91,8 +91,8 @@ services:
   #   volumes:
   #     - "./php-app:/app"
   #   networks:
-  #     - sample-server
-  #     - db-server
+  #     - backend
+  #     - db
 
   view-app:
     build:
@@ -102,7 +102,7 @@ services:
     volumes:
       - "./view-app/src:/usr/share/nginx/view"
     networks:
-      - sample-server
+      - frontend
 
   nginx:
     build:
@@ -116,12 +116,18 @@ services:
       - api-app
       - db-manager
     networks:
-      - sample-server
+      - frontend
+      - backend
 
 networks:
-  sample-server:
+  frontend:
+    name: frontend
     driver: bridge
-  db-server:
+  backend:
+    name: backend
+    driver: bridge
+  db:
+    name: db
     driver: bridge
 
 volumes:

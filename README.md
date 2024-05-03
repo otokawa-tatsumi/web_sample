@@ -94,3 +94,7 @@ docker run --rm -v $(pwd):/app composer composer ＜やりたいこと書く＞
 ``` bash
 docker run --rm -v $(pwd):/app -w /app php:8.3-cli php artisan ＜やりたいこと書く＞
 ```
+
+### 既知の不具合
+- docker-compose立ち上げ時に、networkにサービスが登録されないことがある。（docker network inspect見ると登録されていない）  
+原因不明だが、再度立ち上げれば直る。
