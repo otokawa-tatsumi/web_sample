@@ -7,6 +7,9 @@ use App\Http\Controllers\LoginController;
 use App\Http\Middleware\AuthenticateApi;
 use App\Http\Controllers\MainController;
 
+Route::get('/', function () {
+    return 'welcome';
+});
 Route::post('/login', [LoginController::class, 'login']);
 Route::middleware([AuthenticateApi::class])->group(function () {
     Route::post('/logout', [LoginController::class, 'logout']);
