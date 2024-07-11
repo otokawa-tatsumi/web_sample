@@ -15,6 +15,14 @@ up: ## Dockerコンテナの開始\nNAMEにバックエンドで使用するフ�
 	@docker compose up -d $(OPTION)
 	@mv compose_bk.yaml compose.yaml
 
+.PHONY: restart
+restart: ## Dockerコンテナの再起動\nソースコードを修正した場合に実行する
+	@docker compose restart
+
+.PHONY: log
+log: ## Dockerコンテナのログ表示 Ctrl+Cで終了\n特定のサービスのログのみ表示したい場合はOPTION=compose.yaml上のサービス名を指定する\n（例：バックエンドのログを見たい場合、OPTION=api-appと指定）
+	@docker compose logs -f $(OPTION)
+
 .PHONY: down
 down: ## Dockerコンテナの終了\nDBを初期化したい場合はOPTION=-vを指定する\n（db/init-scripts以下に初期化処理を置く）
 	@docker compose down $(OPTION)
