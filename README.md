@@ -57,7 +57,7 @@ web_sample
     sudo apt-get install make 
     ```
 
-## 実行手順
+## 操作手順
 `make`を実行して表示された説明に従って操作する
 
 ## Webページのアクセス方法
@@ -65,18 +65,18 @@ web_sample
     - ユーザー：user
     - パスワード：password
 
-![alt text](doc/login.png)
+    ![alt text](doc/login.png)
 
 - ログイン成功すると以下の画面が表示される
 
-![alt text](doc/main.png)
+    ![alt text](doc/main.png)
 
 ## DBの参照方法
 - http://localhost:8080/db-manager/ にアクセスし、以下の情報でログインする(pgadmin 4)
     - ユーザー：admin@pgadmin.org
     - パスワード：admin
 
-![alt text](doc/pgadmin.png)
+    ![alt text](doc/pgadmin.png)
 
 
 ## その他
