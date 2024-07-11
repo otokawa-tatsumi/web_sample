@@ -12,7 +12,7 @@ const app_port = 8080;
 app.use(session({
   secret: crypto.randomBytes(32).toString('hex'),
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: false
 }));
 
 // body-parserミドルウェアを使用して、リクエストボディのJSONデータを解析する

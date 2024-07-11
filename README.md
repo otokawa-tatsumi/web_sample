@@ -53,15 +53,15 @@ newgrp docker
 
 - 起動
 ```bash
-docker-compose up --build
+docker compose up -d --build
 # --buildは初回だけでよい(Dockerfileを修正した場合も指定が必要)
 ```
 
 - 停止
 ```bash
-docker-compose down
+docker compose down
 # DBを初期化したい場合は以下(db/init-scripts以下に初期化処理を置く)
-docker-compose down -v
+docker compose down -v
 ```
 
 ## Webページのアクセス方法
@@ -84,17 +84,46 @@ docker-compose down -v
 
 
 ## その他
-### Laravel開発時にcomposerおよびartisanを実行する方法
+### Laravel環境用コマンド
+- 環境構築
+``` bash
+# 以下をphp-appフォルダで実行
+docker run --rm -v $(pwd):/app composer composer create-project --prefer-dist laravel/laravel .
+```
+
 - composer実行
 ``` bash
+# 以下をphp-appフォルダで実行
 docker run --rm -v $(pwd):/app composer composer ＜やりたいこと書く＞
 ```
 
 - phpコマンド実行用
 ``` bash
+# 以下をphp-appフォルダで実行
 docker run --rm -v $(pwd):/app -w /app php:8.3-cli php artisan ＜やりたいこと書く＞
 ```
 
+### nestjs環境用コマンド
+- 環境構築
+``` bash
+# 以下をプロジェクトルートフォルダで実行
+docker run -it --rm -v ${PWD}:/app -w /app node:22-alpine sh -c "
+  apk add --no-cache git &&
+  npm install -g @nestjs/cli &&
+  nest new nestjs-app --skip-install &&
+  cd nestjs-app &&
+  npm install
+"
+cd nestjs-app
+rm -r .git
+```
+
+- npm実行
+``` bash
+# 以下をnestjs-appフォルダで実行
+docker run -it --rm -v ${PWD}:/app -w /app node:22-alpine sh -c "＜やりたいこと書く＞"
+```
+
 ### 既知の不具合
-- docker-compose立ち上げ時に、networkにサービスが登録されないことがある。（docker network inspect見ると登録されていない）  
+- docker compose立ち上げ時に、networkにサービスが登録されないことがある。（docker network inspect見ると登録されていない）  
 原因不明だが、再度立ち上げれば直る。

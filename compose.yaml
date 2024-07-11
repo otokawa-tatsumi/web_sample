@@ -66,6 +66,20 @@ services:
   #     - backend
   #     - db
 
+  # バックエンドをnestjsにしたい場合はコメントを外す
+  # api-app:
+  #   build:
+  #     context: ./nestjs-app
+  #     dockerfile: Dockerfile
+  #   container_name: web-sample-api
+  #   depends_on:
+  #     - db
+  #   volumes:
+  #     - "./nestjs-app:/app"
+  #   networks:
+  #     - backend
+  #     - db
+
   # バックエンドをpythonにしたい場合はコメントを外す
   # api-app:
   #   build:
