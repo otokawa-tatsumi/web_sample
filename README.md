@@ -25,8 +25,6 @@ web_sample
     ├─ # coming soon…
 ```
 
-- バックエンド用のソースは、compose.yamlを編集し、使いたい言語のapi-appのコメントアウトを外す
-
 ## 事前準備
 1. dockerインストール(Ubuntuの例)
     - [公式](https://docs.docker.com/engine/install/)より抜粋
