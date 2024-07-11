@@ -1,4 +1,5 @@
 services:
+  # DB
   db:
     image: postgres:16.2
     container_name: web-sample-db
@@ -12,6 +13,7 @@ services:
     networks:
       - db
 
+  # DBクライアント
   db-manager:
     image: dpage/pgadmin4:8.4
     container_name: web-sample-db-manager
@@ -38,76 +40,21 @@ services:
       - backend
       - db
 
-  # バックエンドをperlにしたい場合はコメントを外す
-  # api-app:
-  #   build:
-  #     context: ./perl-app
-  #     dockerfile: Dockerfile
-  #   container_name: web-sample-api
-  #   depends_on:
-  #     - db
-  #   volumes:
-  #     - "./perl-app/src:/app"
-  #   networks:
-  #     - backend
-  #     - db
+  # バックエンド
+  api-app:
+    build:
+      context: ./____backend____-app
+      dockerfile: Dockerfile
+    container_name: web-sample-api
+    depends_on:
+      - db
+    volumes:
+      - "./____backend____-app:/app"
+    networks:
+      - backend
+      - db
 
-  # バックエンドをnode.jsにしたい場合はコメントを外す
-  # api-app:
-  #   build:
-  #     context: ./node-app
-  #     dockerfile: Dockerfile
-  #   container_name: web-sample-api
-  #   depends_on:
-  #     - db
-  #   volumes:
-  #     - "./node-app/src:/app"
-  #   networks:
-  #     - backend
-  #     - db
-
-  # バックエンドをnestjsにしたい場合はコメントを外す
-  # api-app:
-  #   build:
-  #     context: ./nestjs-app
-  #     dockerfile: Dockerfile
-  #   container_name: web-sample-api
-  #   depends_on:
-  #     - db
-  #   volumes:
-  #     - "./nestjs-app:/app"
-  #   networks:
-  #     - backend
-  #     - db
-
-  # バックエンドをpythonにしたい場合はコメントを外す
-  # api-app:
-  #   build:
-  #     context: ./python-app
-  #     dockerfile: Dockerfile
-  #   container_name: web-sample-api
-  #   depends_on:
-  #     - db
-  #   volumes:
-  #     - "./python-app:/app"
-  #   networks:
-  #     - backend
-  #     - db
-
-  # バックエンドをphpにしたい場合はコメントを外す
-  # api-app:
-  #   build:
-  #     context: ./php-app
-  #     dockerfile: Dockerfile
-  #   container_name: web-sample-api
-  #   depends_on:
-  #     - db
-  #   volumes:
-  #     - "./php-app:/app"
-  #   networks:
-  #     - backend
-  #     - db
-
+  # フロントエンド
   view-app:
     build:
       context: ./view-app
@@ -118,6 +65,7 @@ services:
     networks:
       - frontend
 
+  # リバースプロキシ用
   nginx:
     build:
       context: ./nginx
